@@ -29,6 +29,14 @@ export interface Customer {
     data_nascimento: string | null;
 }
 
+// --- Fallback brands when Supabase RLS blocks reads ---
+export const FALLBACK_BRANDS: Brand[] = [
+    { id: '__boticario__', nome: 'Boticário', logo_url: null, ativo: true },
+    { id: '__avon__', nome: 'Avon', logo_url: null, ativo: true },
+    { id: '__natura__', nome: 'Natura', logo_url: null, ativo: true },
+    { id: '__rommanel__', nome: 'Rommanel', logo_url: null, ativo: true },
+];
+
 // --- API Service ---
 export const api = {
 
@@ -52,6 +60,7 @@ export const api = {
         return (data || []) as Brand[];
     },
 
+
     /** Guarantees the 4 main brands exist and returns all active brands with real UUIDs */
     async ensureDefaultBrands(): Promise<Brand[]> {
         const defaults = ['Boticário', 'Avon', 'Natura', 'Rommanel'];
@@ -68,7 +77,9 @@ export const api = {
             // Ignore RLS/insert errors – fetching below will still work if brands already exist
         }
         const { data: all } = await supabase.from('marcas').select('*').eq('ativo', true).order('nome');
-        return (all || []) as Brand[];
+        const brands = (all || []) as Brand[];
+        // If Supabase RLS blocks reads, return fallbacks without real IDs so UI still works
+        return brands.length > 0 ? brands : FALLBACK_BRANDS;
     },
 
     async createBrand(brandData: Partial<Brand>): Promise<Brand> {
