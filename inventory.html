@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                        "gold": "#d4af37",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass {
+            background: rgba(34, 22, 16, 0.7);
+            border: 1px solid rgba(236, 91, 19, 0.1);
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #d4af37 0%, #f9e29c 50%, #b8860b 100%);
+        }
+        body {
+            background: radial-gradient(circle at top right, rgba(236, 91, 19, 0.08), transparent),
+                        radial-gradient(circle at bottom left, rgba(212, 175, 55, 0.08), transparent);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark min-h-screen text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden pb-24">
+<!-- Header -->
+<header class="sticky top-0 z-50 glass px-4 py-4 flex items-center justify-between">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">arrow_back</span>
+</button>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Gestão de Estoque</h1>
+<div class="size-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">inventory_2</span>
+</div>
+</header>
+<!-- Search Section -->
+<div class="px-4 py-6">
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-3.5 glass border-none rounded-xl focus:ring-2 focus:ring-primary/50 text-base placeholder:text-slate-400" placeholder="Pesquisar no estoque..." type="text"/>
+</div>
+</div>
+<!-- Filters Scroll -->
+<div class="flex gap-3 px-4 pb-6 overflow-x-auto no-scrollbar">
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-primary text-white font-semibold text-sm shadow-lg shadow-primary/20">
+                Todos
+            </button>
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full glass text-slate-600 dark:text-slate-300 font-medium text-sm hover:border-primary/50 transition-all">
+                Baixo Estoque
+            </button>
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full glass text-slate-600 dark:text-slate-300 font-medium text-sm hover:border-primary/50 transition-all">
+                Perfumes
+            </button>
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full glass text-slate-600 dark:text-slate-300 font-medium text-sm hover:border-primary/50 transition-all">
+                Joias
+            </button>
+</div>
+<!-- Stock Summary Header -->
+<div class="px-4 mb-4 flex justify-between items-end">
+<div>
+<h3 class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Inventário Atual</h3>
+<p class="text-2xl font-bold">148 Itens</p>
+</div>
+<div class="flex gap-2 text-xs">
+<span class="flex items-center gap-1 text-emerald-600 font-semibold bg-emerald-100 dark:bg-emerald-900/30 px-2 py-1 rounded">
+<span class="size-2 rounded-full bg-emerald-500"></span> Ok
+                </span>
+<span class="flex items-center gap-1 text-amber-600 font-semibold bg-amber-100 dark:bg-amber-900/30 px-2 py-1 rounded">
+<span class="size-2 rounded-full bg-amber-500"></span> Baixo
+                </span>
+</div>
+</div>
+<!-- Product List -->
+<div class="px-4 space-y-4">
+<!-- Item 1 -->
+<div class="glass p-3 rounded-2xl flex gap-4 items-center">
+<div class="size-20 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800">
+<img class="w-full h-full object-cover" data-alt="Luxurious golden perfume bottle on dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQSTMDfbacnkci21E9ibn-oHuL8QTpBtUQlBqtoxOrYS-hQJyWEUWMxb63inT8SMWLp0-2oPa9uJNZD_pW7Y6lsDuq7tplzlPQAXTMzsCd0l8-2xmqqUmgEERrNdEvl0WbXWE8VJ4Rsf1AumSbgL2dA5Ih4QK8s-TfuGWMY1_Mcw6HL7BiBsRhueNXK7QKYsAGhS7TDwslOK-gXrAu4Z-DEcgrUjGlJxCQNgodW7bKgLO4anEaj0OLeo3j9--ifQRjFr0Qxzlgqw"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-bold text-slate-900 dark:text-white truncate">Malbec Gold 100ml</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">SKU: PER-MG-001</p>
+<div class="mt-2 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs text-slate-500 uppercase font-bold tracking-tighter">Estoque</span>
+<span class="text-emerald-600 dark:text-emerald-400 font-bold">24 unidades</span>
+</div>
+<button class="px-4 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold border border-slate-200 dark:border-slate-700 hover:bg-primary/10 transition-colors">
+                            Ajustar
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 2 (Low Stock) -->
+<div class="glass p-3 rounded-2xl flex gap-4 items-center ring-1 ring-amber-500/20">
+<div class="size-20 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800">
+<img class="w-full h-full object-cover" data-alt="Elegant gold ring with diamond detail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMxYDLOqhh4go0DZ0ivSclBT1Qe7e0xyN56ijpy2XmWTFFmdXYRomjDsMUTQnFDHx6zInKVLIMNZo62RQ0LbwMn3Y-92-ZsmptRgVfl-mDNx82fUH-THGqXzKMrlGIN1PXMpna_o3ohzvusj-58DQvo2LQUTu1yN45om4MAaUB_PpyBLU8ZWV_G8fzgptiA8sVsRu1zwhTLpRFIosuxcEMsqZ9apnhtleNm2v9m5p3EgIilZH7I0N9oWWkkMoHOshtEE-ChU23QA"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-bold text-slate-900 dark:text-white truncate">Anel Rommanel Ouro 18k</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">SKU: JOI-AR-042</p>
+<div class="mt-2 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs text-slate-500 uppercase font-bold tracking-tighter">Estoque</span>
+<span class="text-amber-600 dark:text-amber-400 font-bold">03 unidades</span>
+</div>
+<button class="px-4 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold border border-slate-200 dark:border-slate-700 hover:bg-primary/10 transition-colors">
+                            Ajustar
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="glass p-3 rounded-2xl flex gap-4 items-center">
+<div class="size-20 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800">
+<img class="w-full h-full object-cover" data-alt="Minimalist luxury perfume bottle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBj5obSgowr7RTdnRPLejSrvEogc5qMfYpaWGDnwQ7phGMUYajHCmZr6ayHcn3St_G1bE1LXioo0Jp8z5toibcDDE_TzfejQ_peotzYiqaaRWy6v_j_BZ_CpSjGcrwB9TL-buLge4g8t-D3kBTTP_CarKs4FNPblayllGkVBZy3z_Ag38l1iFnHc2Jtx0NDfqxh_xbp25RYLbhb4LLkMsHQADTojcMq0Xpw_xWwthJC59VOoTgBq85phvrn4pj2zAAUD3n6JKl0EQ"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-bold text-slate-900 dark:text-white truncate">Lily Absolu Eau de Parfum</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">SKU: PER-LA-088</p>
+<div class="mt-2 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs text-slate-500 uppercase font-bold tracking-tighter">Estoque</span>
+<span class="text-emerald-600 dark:text-emerald-400 font-bold">12 unidades</span>
+</div>
+<button class="px-4 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold border border-slate-200 dark:border-slate-700 hover:bg-primary/10 transition-colors">
+                            Ajustar
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="glass p-3 rounded-2xl flex gap-4 items-center">
+<div class="size-20 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-800">
+<img class="w-full h-full object-cover" data-alt="Luxury diamond necklace display" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApRElz0bIJGKlpopDARNy4DdrH4e9o_PQzT_ygXd1B2oftj5LA_yW8_3MKOlwm-Y9ZnOFUOzlD82T1fgdGxrRXJSETHnvAR6lRJbi3k2VT_PVrbW4j7Zwr2zkQcbREkf1F9wOXF13PywyY6gi2Kcuhr5GrOVDY61hpBA6FMNF_C5NeiaGunQGMwR2NjS9X-qWxMKWuJtWqpfnMJdzvv0aVSh437kXxu-QnN_f_FqrVGDGShm7lzAMHJzi5Uv3tUIZCEj0D9g5MkA"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-bold text-slate-900 dark:text-white truncate">Colar Riviera Diamantes</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">SKU: JOI-CR-155</p>
+<div class="mt-2 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs text-slate-500 uppercase font-bold tracking-tighter">Estoque</span>
+<span class="text-emerald-600 dark:text-emerald-400 font-bold">05 unidades</span>
+</div>
+<button class="px-4 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold border border-slate-200 dark:border-slate-700 hover:bg-primary/10 transition-colors">
+                            Ajustar
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- FAB -->
+<button class="fixed bottom-24 right-6 size-14 gold-gradient text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40 border-2 border-white/20">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 glass border-t border-slate-200/50 dark:border-slate-800/50 px-6 py-3 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Início</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">sell</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Vendas</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Relatórios</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">inventory_2</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Estoque</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Config</span>
+</a>
+</nav>
+</div>
+</body></html>

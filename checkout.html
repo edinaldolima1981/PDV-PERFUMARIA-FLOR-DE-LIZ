@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                        "accent-gold": "#d4af37",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass-card {
+            background: rgba(34, 22, 16, 0.7);
+            border: 1px solid rgba(236, 91, 19, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-white dark:bg-background-dark shadow-2xl overflow-x-hidden pb-40">
+<header class="sticky top-0 z-20 flex items-center bg-white/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between border-b border-slate-200 dark:border-slate-800">
+<div class="text-primary flex size-10 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">Carrinho de Luxo</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">delete_sweep</span>
+</button>
+</div>
+</header>
+<main class="flex flex-col gap-6 p-4">
+<section>
+<div class="flex items-center gap-2 mb-3">
+<span class="text-accent-gold material-symbols-outlined">verified</span>
+<h3 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-widest">O Boticário</h3>
+</div>
+<div class="glass-card rounded-xl p-3 flex flex-col gap-4 shadow-sm">
+<div class="flex items-center gap-4 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16 border border-slate-100 dark:border-slate-700" data-alt="Luxury perfume bottle in amber glass" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCWAA0qlnFXGqkRmrq9uFeY8lYDR48XYPIbH9u2jFmyROdCT34oulBzPSGfCLz4LvK8MHgz2Z6KCzgBpOHF-T2-BCR5U2pz4cPu_Ebug-DNoKMPDq_gIZEkLud-SPKctNufHfdmvoMF5xpBVa7pIozqBmTCC5LZov0B5AKhPPTS0cTEmPlwU_I4RwybPa4_zKB_kK2m1iacH4oZS4wJIyaSQmCxLz0n4rCBGJOQekDoUSWoDNBPAd4FNBr3J7eCd2qZj9cERdyUTw");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold leading-tight">Malbec Magnetic</p>
+<p class="text-primary text-sm font-medium">R$ 189,90</p>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-full px-2 py-1">
+<button class="flex h-6 w-6 items-center justify-center rounded-full bg-white dark:bg-slate-700 shadow-sm text-slate-600 dark:text-slate-300">-</button>
+<span class="text-sm font-bold min-w-[1rem] text-center">1</span>
+<button class="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white shadow-sm">+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16 border border-slate-100 dark:border-slate-700" data-alt="Elegant floral perfume bottle" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAUhOehTMApQiNKr0FD-HbH46D022nrImNbI_7X7HmXHrBTx-cO82jZsXGH8b36hgQQqhzy_PmpCGzOnxxz5_KnBfK8UJounD7bvSwEO3g0TNb68zzkrZ8XXkkI5KsI4xQvH9KJDL2EYW8snuz29P7_D3vYUEeni9QxhvQgNw2t4z6cYafNespoTx8n2SfJ9l8TmK-2bejFg-RcfBaCKuKMUA1U6RH0kC8gq_UTqzQ9S4cBpWAVyOW2s1cR2LNXyAjD8PSjiNcePg");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold leading-tight">Lily Eau de Parfum</p>
+<p class="text-primary text-sm font-medium">R$ 254,90</p>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-full px-2 py-1">
+<button class="flex h-6 w-6 items-center justify-center rounded-full bg-white dark:bg-slate-700 shadow-sm text-slate-600 dark:text-slate-300">-</button>
+<span class="text-sm font-bold min-w-[1rem] text-center">2</span>
+<button class="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white shadow-sm">+</button>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div class="flex items-center gap-2 mb-3">
+<span class="text-accent-gold material-symbols-outlined">stars</span>
+<h3 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-widest">Avon</h3>
+</div>
+<div class="glass-card rounded-xl p-3 flex flex-col gap-4 shadow-sm">
+<div class="flex items-center gap-4 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16 border border-slate-100 dark:border-slate-700" data-alt="Modern perfume design with geometric cap" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBjFS7KxlweoM3AwECHQI8TIivv8KkoobiNO1dHMWPdKz0ZvvvjOACgLDyu0P-d_p5hXoayhPLZPWW8hu5t8FCzMsFhNAav1hu-GkqyFvrU5wW2vMJdT41M0iA5ktNLuf8Y8-AiwN8yDVs-d6LXA5kFTnRXDXdhCWFTM1_utsT3-Z5lNtsSG5ie-20_RiIfOzIXlOUvtmCCcG73zAouB3lyMflxgNmStRKNjA0QgrAptz-RVm479ZxTtRo3dNSqbQOkmQO6Imkpew");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold leading-tight">Far Away Beyond</p>
+<p class="text-primary text-sm font-medium">R$ 119,90</p>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-full px-2 py-1">
+<button class="flex h-6 w-6 items-center justify-center rounded-full bg-white dark:bg-slate-700 shadow-sm text-slate-600 dark:text-slate-300">-</button>
+<span class="text-sm font-bold min-w-[1rem] text-center">1</span>
+<button class="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white shadow-sm">+</button>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div class="flex items-center gap-2 mb-3">
+<span class="text-accent-gold material-symbols-outlined">eco</span>
+<h3 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-widest">Natura</h3>
+</div>
+<div class="glass-card rounded-xl p-3 flex flex-col gap-4 shadow-sm">
+<div class="flex items-center gap-4 justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16 border border-slate-100 dark:border-slate-700" data-alt="Organic minimal perfume bottle Natura style" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuANMD6WN264Zb5zRNIsRRPdzIur8Ao6fJyFo3yTpTHdbYOLrACmdhkDUfjPSEeI6sUif4BasORKekjohs1nbrtreH9BDGu64HIyQw7B4tlih5RzNvrcveUdOgiVbVZ1QfJEUs-8vZxTXfpovNH6CV5f-KLnvfPnSDch_Q0ryooJWNeE_j2HfKXDMGOKUzVwh5ctWL_IQ3h_vpkptY53jFoj3UN3MUgDQEGuKrtirjV9hvkArKoVnfVmhxP877vjjsl5BMU5lRnXZw");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold leading-tight">Essencial Único</p>
+<p class="text-primary text-sm font-medium">R$ 210,00</p>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-full px-2 py-1">
+<button class="flex h-6 w-6 items-center justify-center rounded-full bg-white dark:bg-slate-700 shadow-sm text-slate-600 dark:text-slate-300">-</button>
+<span class="text-sm font-bold min-w-[1rem] text-center">1</span>
+<button class="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white shadow-sm">+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<section class="fixed bottom-0 left-0 right-0 z-30 max-w-md mx-auto p-4 bg-white/95 dark:bg-background-dark/95 border-t border-slate-200 dark:border-slate-800 shadow-2xl">
+<div class="mb-4">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="bg-primary/10 p-2 rounded-full">
+<span class="text-primary material-symbols-outlined">person</span>
+</div>
+<div>
+<p class="text-xs text-slate-500 uppercase font-bold tracking-tighter">Cliente Registrado</p>
+<p class="text-sm font-bold">Helena de Souza Fontes</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs text-slate-500 font-medium">Total do Carrinho</p>
+<p class="text-xl font-bold text-slate-900 dark:text-slate-100">R$ 1.029,60</p>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+<div class="flex items-center gap-3">
+<div class="text-green-600 dark:text-green-500">
+<span class="material-symbols-outlined">chat</span>
+</div>
+<span class="text-sm font-medium">Enviar Comprovante via WhatsApp</span>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+<div class="flex items-center gap-3">
+<div class="text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">print</span>
+</div>
+<span class="text-sm font-medium">Imprimir Comprovante Local</span>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">shopping_cart_checkout</span>
+                Finalizar Venda
+            </button>
+</section>
+<nav class="fixed bottom-0 left-0 right-0 z-10 max-w-md mx-auto hidden">
+<div class="flex gap-2 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark px-4 pb-3 pt-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">shopping_bag</span>
+<p class="text-xs font-medium">Vendas</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">sell</span>
+<p class="text-xs font-medium">Produtos</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">group</span>
+<p class="text-xs font-medium">Clientes</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-xs font-medium">Ajustes</p>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

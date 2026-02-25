@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>L'Essence CRM - Gestão de Luxo</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                        "gold": "#d4af37",
+                        "glass": "rgba(255, 255, 255, 0.1)",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(236, 91, 19, 0.1);
+        }
+        .dark .glass-card {
+            background: rgba(34, 22, 16, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #d4af37 0%, #f9f1c0 50%, #d4af37 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Header Navigation -->
+<header class="sticky top-0 z-50 glass-card border-b border-slate-200 dark:border-slate-800 px-4 py-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full gold-gradient flex items-center justify-center text-background-dark shadow-lg">
+<span class="material-symbols-outlined text-2xl">star</span>
+</div>
+<div>
+<h1 class="text-lg font-bold tracking-tight">L'Essence <span class="text-primary">CRM</span></h1>
+<p class="text-[10px] uppercase tracking-[0.2em] opacity-60">Atendimento Exclusive</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="p-2 rounded-full hover:bg-primary/10 transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full"></span>
+</button>
+</div>
+</header>
+<main class="max-w-md mx-auto p-4 space-y-6">
+<!-- Section 1: Programa de Fidelidade -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">workspace_premium</span>
+                    Programa de Fidelidade
+                </h2>
+<span class="text-xs font-semibold text-primary px-2 py-1 bg-primary/10 rounded">TOP TIER</span>
+</div>
+<div class="space-y-3">
+<!-- Customer 1 -->
+<div class="glass-card rounded-xl p-4 shadow-sm flex items-center gap-4">
+<div class="relative">
+<div class="size-14 rounded-full border-2 border-primary overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="Professional elegant woman portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL1qp3AvUsrNGvPGWNcAP_Glx7mmY5FAoMstY5BcUg-rBpYsjXiho7oUNsaMH-vwuZMenOhpQU0XB8N2jwsViTOvjGsGribZc3yRdekGBTBmBzEfEndBnuwSVzKhKza8V43Mfg5iNog_6TWF2SyylV568US01PLJUKCunEiZpwPLyej3kTQI9jt2G1YMcdAIwX2gkO96e35YdwqsyyMgoNSv3U5270DEkVKgs4mO3P4T3N4aleRyRI3SQxhOrJJLIXZCPXyi2hlQ"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-gold text-[10px] font-bold px-1.5 rounded-full text-white">Vip</div>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-bold text-base truncate">Elena Cavalcanti</h3>
+<p class="text-xs text-primary font-medium">Próxima: Perfume 50ml Grátis</p>
+<div class="flex gap-3 mt-1 opacity-70 text-[10px] font-semibold uppercase">
+<span>12 Compras</span>
+<span>4.500 Pontos</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+<!-- Customer 2 -->
+<div class="glass-card rounded-xl p-4 shadow-sm flex items-center gap-4">
+<div class="size-14 rounded-full border-2 border-slate-200 dark:border-slate-700 overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="Stylish man in suit portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4MVQEiproNQG4diVU29VXeh40Y7isHzvY7plNEp9ENpVpJewFtSOTbaf4S91MNrGB-HpSFwXSl0immm8dgEBX_ZqoaFeJtKB30-nB6VvaBBn3Db5pbjeZNwTyLtPd5TChTF1c3ZYJUNla9yeZXUnu66NivuFdW6VJ6cPxhOLuknh1jmRKdKXrqC3san2MLz1bYDMFSb-d0sCkEZy4tD5iK5Yk8wsGQvX3ejB50t6JmDW8OgnDaR5B6S20BWFvUA8XjEhYP7yj_w"/>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-bold text-base truncate">Marco Aurélio</h3>
+<p class="text-xs text-primary font-medium">Próxima: 15% Off Ed. Limitada</p>
+<div class="flex gap-3 mt-1 opacity-70 text-[10px] font-semibold uppercase">
+<span>08 Compras</span>
+<span>2.800 Pontos</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Section 2: Status de Pagamento -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">account_balance_wallet</span>
+                    Fluxo de Recebíveis
+                </h2>
+</div>
+<!-- Destaque: Bons Pagadores -->
+<div class="mb-6">
+<h3 class="text-[10px] font-bold uppercase tracking-widest text-emerald-600 mb-3 flex items-center gap-1">
+<span class="size-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                    Destaque: Em Dia
+                </h3>
+<div class="glass-card rounded-xl p-5 space-y-4">
+<div class="space-y-1">
+<div class="flex justify-between text-sm mb-1">
+<span class="font-medium">Beatriz Soares</span>
+<span class="text-emerald-600 font-bold">100%</span>
+</div>
+<div class="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 rounded-full" style="width: 100%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-sm mb-1">
+<span class="font-medium">Ricardo Mendes</span>
+<span class="text-emerald-600 font-bold">92%</span>
+</div>
+<div class="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 rounded-full" style="width: 92%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pendentes / Mau Pagadores -->
+<div>
+<h3 class="text-[10px] font-bold uppercase tracking-widest text-primary mb-3 flex items-center gap-1">
+<span class="size-1.5 bg-primary rounded-full"></span>
+                    Atenção: Pendências
+                </h3>
+<div class="glass-card rounded-xl p-5 space-y-4">
+<div class="space-y-1">
+<div class="flex justify-between text-sm mb-1">
+<span class="font-medium">Juliana Lima</span>
+<span class="text-primary font-bold">65% (Atraso 5d)</span>
+</div>
+<div class="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary/60 rounded-full" style="width: 65%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-sm mb-1">
+<span class="font-medium">Gustavo Pereira</span>
+<span class="text-red-500 font-bold">30% (Crítico)</span>
+</div>
+<div class="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-red-500 rounded-full" style="width: 30%"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 glass-card border-t border-slate-200 dark:border-slate-800 px-6 py-3 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold">Início</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">sell</span>
+<span class="text-[10px] font-bold">Vendas</span>
+</a>
+<div class="relative -top-6">
+<button class="size-14 gold-gradient rounded-full shadow-xl flex items-center justify-center text-background-dark border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-3xl font-bold">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-bold">Clientes</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold">Config</span>
+</a>
+</nav>
+</body></html>
