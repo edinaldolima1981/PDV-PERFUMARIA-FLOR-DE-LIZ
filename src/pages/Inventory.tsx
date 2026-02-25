@@ -19,8 +19,14 @@ const Inventory: React.FC = () => {
 
     useEffect(() => {
         const init = async () => {
-            await api.ensureDefaultBrands();
-            await Promise.all([loadInventory(), loadBrands()]);
+            // ensureDefaultBrands now returns real brands with UUIDs
+            const realBrands = await api.ensureDefaultBrands();
+            if (realBrands.length > 0) {
+                setBrands(realBrands);
+            } else {
+                loadBrands(); // fallback: try the normal getBrands call
+            }
+            loadInventory();
         };
         init();
         if (location.state?.brand) {

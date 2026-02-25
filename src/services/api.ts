@@ -67,11 +67,14 @@ export const api = {
         return data as Brand[];
     },
 
-    async ensureDefaultBrands() {
+    async ensureDefaultBrands(): Promise<Brand[]> {
         const defaults = ['Boticário', 'Avon', 'Natura', 'Rommanel'];
-        const { data: existing } = await supabase.from('marcas').select('nome');
+
+        // Fetch whatever exists
+        const { data: existing } = await supabase.from('marcas').select('*').order('nome');
         const existingNames = existing?.map((b: { nome: string }) => b.nome) || [];
 
+        // Insert only the ones that are missing
         const toInsert = defaults
             .filter(name => !existingNames.includes(name))
             .map(name => ({ nome: name, ativo: true }));
@@ -79,6 +82,10 @@ export const api = {
         if (toInsert.length > 0) {
             await supabase.from('marcas').insert(toInsert);
         }
+
+        // Fetch again to get real UUIDs for everyone
+        const { data: all } = await supabase.from('marcas').select('*').eq('ativo', true).order('nome');
+        return (all || []) as Brand[];
     },
 
     async createBrand(brandData: Partial<Brand>) {
