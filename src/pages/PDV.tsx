@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 
 const PDV: React.FC = () => {
+    const navigate = useNavigate();
     const [showSuccess, setShowSuccess] = useState(false);
     const [items, setItems] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState<'pix' | 'dinheiro' | 'credito' | 'debito'>('pix');
 
     useEffect(() => {
         const savedCart = localStorage.getItem('flordeliz_cart');
         if (savedCart) {
-            setItems(JSON.parse(savedCart));
+            try { setItems(JSON.parse(savedCart)); } catch (_) { setItems([]); }
         }
     }, []);
 
@@ -17,94 +20,110 @@ const PDV: React.FC = () => {
         localStorage.setItem('flordeliz_cart', JSON.stringify(items));
     }, [items]);
 
-    const brands = Array.from(new Set(items.map(item => item.brand || item.marca_nome)));
+    const total = items.reduce((acc, item) =>
+        acc + ((item.price || item.preco || 0) * (item.quantity || 1)), 0);
 
-    const total = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const brands = Array.from(new Set(items.map(item => item.brand || item.marca_nome || 'Geral')));
 
     const updateQuantity = (id: string, delta: number) => {
-        setItems(prev => prev.map(item =>
-            item.id === id ? { ...item, quantity: Math.max(0, item.quantity + delta) } : item
-        ).filter(item => item.quantity > 0));
+        setItems(prev =>
+            prev.map(item =>
+                item.id === id
+                    ? { ...item, quantity: Math.max(0, (item.quantity || 1) + delta) }
+                    : item
+            ).filter(item => (item.quantity || 0) > 0)
+        );
     };
 
     const handleCheckout = async () => {
+        if (items.length === 0) return;
         try {
             setLoading(true);
             const saleData = {
                 subtotal: total,
                 total: total,
-                forma_pagamento: 'pix', // Default for now
+                forma_pagamento: paymentMethod,
                 status: 'concluida',
-                cliente_id: null, // Default
-                funcionario_id: null // Default
+                cliente_id: null,
+                funcionario_id: null,
             };
-
             await api.createSale(saleData, items);
-
-            setShowSuccess(true);
             setItems([]);
+            localStorage.removeItem('flordeliz_cart');
+            setShowSuccess(true);
             setTimeout(() => {
                 setShowSuccess(false);
+                navigate('/');
             }, 3000);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Erro ao finalizar venda:', error);
-            alert('Erro ao finalizar venda. Verifique sua conexão.');
+            alert('Erro ao finalizar venda: ' + (error?.message || 'Verifique sua conexão.'));
         } finally {
             setLoading(false);
         }
     };
 
+    const paymentOptions: { value: typeof paymentMethod; label: string; icon: string }[] = [
+        { value: 'pix', label: 'PIX', icon: 'qr_code_2' },
+        { value: 'dinheiro', label: 'Dinheiro', icon: 'payments' },
+        { value: 'credito', label: 'Crédito', icon: 'credit_card' },
+        { value: 'debito', label: 'Débito', icon: 'credit_score' },
+    ];
+
     return (
-        <div className="min-h-screen bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 pb-64">
+        <div className="min-h-screen bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 pb-56">
+            {/* Header */}
             <header className="sticky top-0 z-20 flex items-center bg-white/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between border-b border-slate-200 dark:border-slate-800">
-                <div className="text-primary flex size-10 items-center justify-center cursor-pointer hover:bg-white/10 rounded-full transition-all" onClick={() => window.history.back()}>
+                <button
+                    className="text-primary flex size-10 items-center justify-center hover:bg-white/10 rounded-full"
+                    onClick={() => navigate(-1)}
+                >
                     <span className="material-symbols-outlined">arrow_back</span>
-                </div>
-                <h2 className="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">Carrinho de Luxo</h2>
-                <div className="flex w-10 items-center justify-end">
-                    <button className="text-slate-400 hover:text-red-500 transition-colors" onClick={() => setItems([])}>
-                        <span className="material-symbols-outlined">delete_sweep</span>
-                    </button>
-                </div>
+                </button>
+                <h2 className="text-lg font-bold flex-1 text-center">Carrinho de Vendas</h2>
+                <button
+                    className="flex size-10 items-center justify-center text-slate-400 hover:text-red-500"
+                    onClick={() => { setItems([]); }}
+                >
+                    <span className="material-symbols-outlined">delete_sweep</span>
+                </button>
             </header>
 
-            <main className="max-w-md mx-auto flex flex-col gap-6 p-4">
-                {brands.map((brand) => (
+            <main className="max-w-md mx-auto flex flex-col gap-4 p-4">
+                {/* Items by brand */}
+                {brands.map(brand => (
                     <section key={brand}>
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="text-gold material-symbols-outlined">
-                                {brand === 'O Boticário' ? 'verified' : brand === 'Avon' ? 'stars' : 'eco'}
-                            </span>
-                            <h3 className="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-widest">{brand}</h3>
-                        </div>
-
-                        <div className="glass-card rounded-xl p-3 flex flex-col gap-4 shadow-sm">
-                            {items.filter(i => (i.brand || i.marca_nome) === brand).map((item) => (
-                                <div key={item.id} className="flex items-center gap-4 justify-between group">
-                                    <div className="flex items-center gap-4">
-                                        <div
-                                            className="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16 border border-slate-100 dark:border-slate-700 shadow-inner"
-                                            style={{ backgroundImage: `url("${item.image || item.imagem_url}")` }}
-                                        />
-                                        <div className="flex flex-col justify-center">
-                                            <p className="text-slate-900 dark:text-slate-100 text-base font-semibold leading-tight">{item.name || item.nome}</p>
-                                            <p className="text-primary text-sm font-medium">R$ {(item.price || item.preco).toFixed(2).replace('.', ',')}</p>
+                        <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2 flex items-center gap-2">
+                            <span className="material-symbols-outlined text-primary text-sm">storefront</span>
+                            {brand}
+                        </h3>
+                        <div className="glass-card rounded-2xl p-3 space-y-4">
+                            {items.filter(i => (i.brand || i.marca_nome || 'Geral') === brand).map(item => (
+                                <div key={item.id} className="flex items-center gap-3 justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="size-14 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700 shrink-0">
+                                            {(item.image || item.imagem_url)
+                                                ? <img src={item.image || item.imagem_url} className="w-full h-full object-cover" alt={item.name || item.nome} />
+                                                : <span className="material-symbols-outlined text-slate-400">inventory_2</span>
+                                            }
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-sm">{item.name || item.nome}</p>
+                                            <p className="text-primary text-sm font-bold">
+                                                R$ {(item.price || item.preco || 0).toFixed(2).replace('.', ',')}
+                                            </p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-full px-2 py-1">
+                                    <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-full px-2 py-1 shrink-0">
                                         <button
-                                            className="flex h-6 w-6 items-center justify-center rounded-full bg-white dark:bg-slate-700 shadow-sm text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+                                            className="size-6 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center font-bold text-slate-600 shadow-sm"
                                             onClick={() => updateQuantity(item.id, -1)}
-                                        >
-                                            -
-                                        </button>
-                                        <span className="text-sm font-bold min-w-[1rem] text-center">{item.quantity}</span>
+                                        >-</button>
+                                        <span className="text-sm font-bold min-w-[1.25rem] text-center">{item.quantity}</span>
                                         <button
-                                            className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white shadow-sm hover:bg-primary/90 transition-colors"
+                                            className="size-6 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-sm"
                                             onClick={() => updateQuantity(item.id, 1)}
-                                        >
-                                            +
-                                        </button>
+                                        >+</button>
                                     </div>
                                 </div>
                             ))}
@@ -112,91 +131,61 @@ const PDV: React.FC = () => {
                     </section>
                 ))}
 
+                {/* Empty state */}
                 {items.length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-20 opacity-50">
+                    <div className="flex flex-col items-center justify-center py-20 opacity-40">
                         <span className="material-symbols-outlined text-6xl mb-4">shopping_cart_off</span>
                         <p className="text-lg font-bold">Carrinho Vazio</p>
-                        <p className="text-sm">Seus produtos aparecerão aqui.</p>
+                        <p className="text-sm mt-1">Adicione produtos pelo catálogo.</p>
                     </div>
                 )}
             </main>
 
-            {/* Summary Section */}
+            {/* Fixed Bottom Summary */}
             <section className="fixed bottom-0 left-0 right-0 z-30 max-w-md mx-auto p-4 bg-white/95 dark:bg-background-dark/95 border-t border-slate-200 dark:border-slate-800 shadow-2xl backdrop-blur-md">
-                <div className="mb-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                            <div className="bg-primary/10 p-2 rounded-full">
-                                <span className="text-primary material-symbols-outlined">person</span>
-                            </div>
-                            <div>
-                                <p className="text-xs text-slate-500 uppercase font-bold tracking-tighter">Cliente Registrado</p>
-                                <p className="text-sm font-bold">Helena de Souza Fontes</p>
-                            </div>
-                        </div>
-                        <div className="text-right">
-                            <p className="text-xs text-slate-500 font-medium">Total do Carrinho</p>
-                            <p className="text-xl font-bold text-slate-900 dark:text-slate-100">R$ {total.toFixed(2).replace('.', ',')}</p>
-                        </div>
-                    </div>
-
-                    <div className="space-y-3">
-                        <label className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-                            <div className="flex items-center gap-3">
-                                <div className="text-green-600 dark:text-green-500">
-                                    <span className="material-symbols-outlined">chat</span>
-                                </div>
-                                <span className="text-sm font-medium">Enviar Comprovante via WhatsApp</span>
-                            </div>
-                            <div className="relative inline-flex items-center">
-                                <input type="checkbox" className="sr-only peer" defaultChecked />
-                                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
-                            </div>
-                        </label>
-
-                        <label className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-                            <div className="flex items-center gap-3">
-                                <div className="text-slate-600 dark:text-slate-400">
-                                    <span className="material-symbols-outlined">print</span>
-                                </div>
-                                <span className="text-sm font-medium">Imprimir Comprovante Local</span>
-                            </div>
-                            <div className="relative inline-flex items-center">
-                                <input type="checkbox" className="sr-only peer" />
-                                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
-                            </div>
-                        </label>
-                    </div>
+                {/* Payment Options */}
+                <div className="grid grid-cols-4 gap-2 mb-4">
+                    {paymentOptions.map(opt => (
+                        <button
+                            key={opt.value}
+                            onClick={() => setPaymentMethod(opt.value)}
+                            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all text-xs font-bold ${paymentMethod === opt.value
+                                    ? 'bg-primary text-white shadow-lg'
+                                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
+                                }`}
+                        >
+                            <span className="material-symbols-outlined text-lg">{opt.icon}</span>
+                            {opt.label}
+                        </button>
+                    ))}
                 </div>
 
+                {/* Total + Checkout */}
+                <div className="flex items-center justify-between mb-3">
+                    <p className="text-slate-500 text-sm font-medium">Total</p>
+                    <p className="text-2xl font-black">R$ {total.toFixed(2).replace('.', ',')}</p>
+                </div>
                 <button
                     onClick={handleCheckout}
-                    className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-primary text-white py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
                     disabled={items.length === 0 || loading}
                 >
-                    {loading ? (
-                        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
-                    ) : (
-                        <>
-                            <span className="material-symbols-outlined">shopping_cart_checkout</span>
-                            Finalizar Venda
-                        </>
-                    )}
+                    {loading
+                        ? <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white" />
+                        : <><span className="material-symbols-outlined">shopping_cart_checkout</span> Finalizar Venda</>
+                    }
                 </button>
             </section>
 
             {/* Success Modal */}
             {showSuccess && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-                    <div className="glass-card p-8 rounded-3xl border border-gold/50 max-w-sm w-full text-center shadow-2xl animate-in zoom-in duration-300">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                    <div className="glass-card p-8 rounded-3xl border border-primary/30 max-w-sm w-full text-center shadow-2xl">
                         <div className="size-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-primary animate-bounce">
                             <span className="material-symbols-outlined text-primary text-4xl">check_circle</span>
                         </div>
                         <h3 className="text-2xl font-black mb-2">Venda Finalizada!</h3>
-                        <p className="text-slate-400 text-sm mb-6">O comprovante foi enviado com sucesso para o cliente.</p>
-                        <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
-                            <div className="h-full bg-primary animate-progress" style={{ width: '100%' }} />
-                        </div>
+                        <p className="text-slate-400 text-sm">Redirecionando para o início...</p>
                     </div>
                 </div>
             )}
