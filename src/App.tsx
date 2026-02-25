@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import PDV from './pages/PDV';
 import Inventory from './pages/Inventory';
 import Customers from './pages/Customers';
+import Reports from './pages/Reports';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: 'customers',
         element: <Customers />,
+      },
+      {
+        path: 'reports',
+        element: <Reports />,
       },
       {
         path: 'settings',

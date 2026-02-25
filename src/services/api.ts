@@ -127,5 +127,28 @@ export const api = {
         if (itemsError) throw itemsError;
 
         return sale;
+    },
+
+    // Novo Produto
+    async createProduct(productData: any, initialStock: number) {
+        const { data: product, error: productError } = await supabase
+            .from('produtos')
+            .insert([productData])
+            .select()
+            .single();
+
+        if (productError) throw productError;
+
+        const { error: stockError } = await supabase
+            .from('estoque')
+            .insert({
+                produto_id: product.id,
+                quantidade: initialStock,
+                quantidade_minima: 5
+            });
+
+        if (stockError) throw stockError;
+
+        return product;
     }
 };

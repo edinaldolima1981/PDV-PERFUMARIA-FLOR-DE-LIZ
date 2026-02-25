@@ -5,7 +5,6 @@ import { api } from '../services/api';
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
     const [products, setProducts] = useState<any[]>([]);
-    const [brandsData, setBrandsData] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [cart, setCart] = useState<any[]>([]);
 
@@ -18,12 +17,8 @@ const Dashboard: React.FC = () => {
     const loadDashboardData = async () => {
         try {
             setLoading(true);
-            const [prods, brnds] = await Promise.all([
-                api.getProducts(),
-                api.getBrands()
-            ]);
+            const prods = await api.getProducts();
             setProducts(prods || []);
-            setBrandsData(brnds || []);
         } catch (error) {
             console.error('Erro ao carregar dados do dashboard:', error);
         } finally {
@@ -33,16 +28,7 @@ const Dashboard: React.FC = () => {
 
     const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
     const cartTotalValue = cart.reduce((acc, item) => acc + ((item.price || item.preco) * item.quantity), 0);
-
     const lowStockAlerts = products.filter(p => p.quantidade <= p.quantidade_minima).length;
-
-    // UI Brand config
-    const brandStyles: any = {
-        'O Boticário': { color: 'from-[#064e3b] to-[#022c22]', border: 'border-emerald-900/50' },
-        'Avon': { color: 'from-[#be185d] to-[#831843]', border: 'border-pink-900/50' },
-        'Natura': { color: 'from-[#9a3412] to-[#7c2d12]', border: 'border-orange-900/50' },
-        'Rommanel': { color: 'from-[#d4af37] to-[#92400e]', border: 'border-yellow-700/50' },
-    };
 
     const addToCart = (product: any) => {
         const newCart = [...cart];
@@ -74,122 +60,130 @@ const Dashboard: React.FC = () => {
     return (
         <div className="min-h-screen bg-background-light dark:bg-charcoal text-slate-900 dark:text-slate-100 font-display">
             <main className="max-w-7xl mx-auto pb-32">
-                {/* Marcas Section */}
-                <section className="p-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xs font-bold uppercase tracking-widest text-gold text-primary">Escolha a Marca</h3>
-                        <span className="material-symbols-outlined text-slate-400 text-sm">chevron_right</span>
-                    </div>
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pb-2">
-                        {brandsData.map((brand) => (
-                            <div
-                                key={brand.id}
-                                className={`aspect-[4/3] lg:aspect-square rounded-xl relative overflow-hidden group border ${brandStyles[brand.nome]?.border || 'border-slate-800'} bg-gradient-to-br ${brandStyles[brand.nome]?.color || 'from-slate-800 to-black'} shadow-lg hover:shadow-primary/20 transition-all cursor-pointer`}
-                            >
-                                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
-                                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span className="material-symbols-outlined text-[14px] bg-black/40 p-1 rounded-full text-white">edit</span>
-                                    <span className="material-symbols-outlined text-[14px] bg-black/40 p-1 rounded-full text-white">photo_camera</span>
-                                </div>
-                                <div className="absolute bottom-4 left-4">
-                                    <p className="text-white text-base font-black leading-tight drop-shadow-md">{brand.nome}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                {/* Header Section */}
+                <section className="p-6 pt-10">
+                    <h2 className="text-3xl font-black italic mb-2 tracking-tighter">
+                        Olá, <span className="text-primary not-italic">Seja Bem-vinda!</span>
+                    </h2>
+                    <p className="text-xs text-slate-400 font-medium uppercase tracking-widest">Escolha uma marca para começar</p>
                 </section>
 
-                {/* Quick Actions */}
-                <section className="px-4 py-2 grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Brand Selection Cards - 4 CARDS AS REQUESTED */}
+                <section className="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {[
-                        { icon: 'bar_chart', label: 'Relatórios', path: '/reports' },
-                        { icon: 'settings', label: 'Configurações', path: '/settings' },
-                        { icon: 'inventory_2', label: 'Estoque', path: '/inventory' },
-                        { icon: 'sell', label: 'Produtos', path: '/inventory' },
-                    ].map((action) => (
+                        {
+                            name: 'Boticário',
+                            color: 'from-[#064e3b] to-[#022c22]',
+                            accent: 'emerald',
+                            icon: 'compost'
+                        },
+                        {
+                            name: 'Avon',
+                            color: 'from-[#be185d] to-[#831843]',
+                            accent: 'pink',
+                            icon: 'skincare'
+                        },
+                        {
+                            name: 'Natura',
+                            color: 'from-[#9a3412] to-[#7c2d12]',
+                            accent: 'orange',
+                            icon: 'eco'
+                        },
+                        {
+                            name: 'Rommanel',
+                            color: 'from-[#d4af37] to-[#92400e]',
+                            accent: 'amber',
+                            icon: 'diamond'
+                        }
+                    ].map((brand) => (
                         <button
-                            key={action.label}
-                            onClick={() => navigate(action.path)}
-                            className="glass-card flex flex-col items-center gap-3 p-6 rounded-2xl border border-white/5 hover:border-gold/50 hover:bg-gold/5 transition-all group overflow-hidden relative"
+                            key={brand.name}
+                            onClick={() => navigate('/inventory', { state: { brand: brand.name } })}
+                            className={`h-48 rounded-3xl relative overflow-hidden group shadow-2xl transition-all hover:scale-[1.03] active:scale-95 bg-gradient-to-br ${brand.color} p-6 text-left`}
                         >
-                            <div className="absolute top-0 right-0 w-16 h-16 bg-gold/5 rounded-full -mr-8 -mt-8 blur-2xl group-hover:bg-gold/20 transition-all pointer-events-none" />
-                            <span className="material-symbols-outlined text-gold text-3xl group-hover:scale-110 transition-transform">{action.icon}</span>
-                            <span className="text-sm font-black tracking-tight uppercase">{action.label}</span>
+                            {/* Decorative Elements */}
+                            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <span className="material-symbols-outlined text-8xl scale-150">{brand.icon}</span>
+                            </div>
+                            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all"></div>
+
+                            <div className="relative h-full flex flex-col justify-between z-10">
+                                <div className="size-12 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
+                                    <span className="material-symbols-outlined text-white">{brand.icon}</span>
+                                </div>
+                                <div>
+                                    <h4 className="text-2xl font-black text-white italic tracking-tighter mb-1">{brand.name}</h4>
+                                    <p className="text-[10px] text-white/60 font-black uppercase tracking-widest">Ver Catálogo</p>
+                                </div>
+                            </div>
                         </button>
                     ))}
                 </section>
 
-                {/* Carrinho Bar */}
-                <section className="px-4 py-4" onClick={() => navigate('/pdv')}>
-                    <div className="bg-primary hover:bg-primary/90 rounded-xl p-4 flex items-center justify-between cursor-pointer shadow-lg shadow-primary/20 transition-all active:scale-[0.98]">
-                        <div className="flex items-center gap-3">
-                            <span className="material-symbols-outlined text-white">shopping_bag</span>
-                            <span className="text-white font-bold uppercase text-sm tracking-wide">Ver Carrinho</span>
+                {/* Secondary Actions / Stats Summary */}
+                <section className="p-6 grid grid-cols-2 gap-4">
+                    <div className="glass-card rounded-2xl p-4 flex items-center gap-4 border border-emerald-500/20 bg-emerald-500/5">
+                        <div className="size-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-500">
+                            <span className="material-symbols-outlined">payments</span>
                         </div>
-                        <div className="flex items-center gap-4">
-                            <span className="text-white/80 text-xs">{cartCount} itens</span>
-                            <span className="text-white font-extrabold">R$ {cartTotalValue.toFixed(2).replace('.', ',')}</span>
+                        <div>
+                            <p className="text-[9px] font-black uppercase text-slate-400">Vendas Hoje</p>
+                            <p className="text-sm font-bold">R$ 1.250,00</p>
+                        </div>
+                    </div>
+                    <div className="glass-card rounded-2xl p-4 flex items-center gap-4 border border-amber-500/20 bg-amber-500/5" onClick={() => navigate('/inventory')}>
+                        <div className="size-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-500">
+                            <span className="material-symbols-outlined">inventory_2</span>
+                        </div>
+                        <div>
+                            <p className="text-[9px] font-black uppercase text-slate-400">Estoque</p>
+                            <p className="text-sm font-bold text-amber-500">{lowStockAlerts} Alertas</p>
                         </div>
                     </div>
                 </section>
 
-                {/* Destaques */}
-                <section className="p-4">
-                    <h3 className="text-xs font-bold uppercase tracking-widest text-gold mb-4">Destaques do Dia</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        {products.filter(p => p.destaque).slice(0, 4).map((product) => (
-                            <div key={product.id} className="glass-card rounded-xl overflow-hidden border border-white/5 group">
-                                <div className="aspect-square bg-white/5 relative flex items-center justify-center">
-                                    <img className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" src={product.imagem_url || ''} alt={product.nome} />
-                                    <div className="absolute top-2 right-2 bg-charcoal/80 p-1 rounded-lg backdrop-blur">
-                                        <span className="material-symbols-outlined text-gold text-sm">favorite</span>
-                                    </div>
+                {/* Carrinho Flutuante (Refinado) */}
+                {cartCount > 0 && (
+                    <section className="px-6 py-2" onClick={() => navigate('/pdv')}>
+                        <div className="bg-primary p-4 rounded-2xl flex items-center justify-between shadow-2xl shadow-primary/30 cursor-pointer animate-in slide-in-from-bottom-5 duration-500">
+                            <div className="flex items-center gap-3">
+                                <span className="material-symbols-outlined text-white">shopping_bag</span>
+                                <div>
+                                    <span className="text-white font-black uppercase text-[10px] tracking-widest block leading-none">Venda em Aberto</span>
+                                    <span className="text-white/70 text-xs font-medium">{cartCount} itens no carrinho</span>
                                 </div>
-                                <div className="p-3">
-                                    <p className="text-xs text-slate-400">{product.marca_nome}</p>
-                                    <h4 className="font-bold text-sm line-clamp-1 mb-2">{product.nome}</h4>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gold font-bold">R$ {product.preco.toFixed(2).replace('.', ',')}</span>
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                addToCart(product);
-                                            }}
-                                            className="size-8 rounded-lg bg-gold/20 flex items-center justify-center text-gold border border-gold/30 hover:bg-gold hover:text-white transition-all active:scale-90"
-                                        >
-                                            <span className="material-symbols-outlined text-sm font-bold">add</span>
-                                        </button>
+                            </div>
+                            <div className="text-right">
+                                <span className="text-white text-lg font-black italic">R$ {cartTotalValue.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
+                {/* Destaques (Opcional, mas mantido para Preenchimento Visual Premium) */}
+                <section className="p-6">
+                    <div className="flex items-center justify-between mb-4 px-2">
+                        <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">Produtos em Destaque</h3>
+                        <button className="text-[10px] font-black uppercase text-primary" onClick={() => navigate('/inventory')}>Ver Todos</button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        {products.filter(p => p.destaque || p.imagem_url).slice(0, 4).map((product) => (
+                            <div key={product.id} className="glass-card rounded-3xl overflow-hidden border border-white/5 group">
+                                <div className="aspect-[4/5] bg-white/5 relative flex items-center justify-center">
+                                    <img className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src={product.imagem_url || ''} alt={product.nome} />
+                                    <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                                        <p className="text-[8px] text-white/60 font-black uppercase tracking-tighter truncate">{product.marca_nome}</p>
+                                        <h4 className="font-bold text-white text-xs truncate">{product.nome}</h4>
                                     </div>
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); addToCart(product); }}
+                                        className="absolute top-3 right-3 size-8 rounded-xl bg-primary shadow-lg flex items-center justify-center text-white scale-0 group-hover:scale-100 transition-transform duration-300"
+                                    >
+                                        <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                    </button>
                                 </div>
                             </div>
                         ))}
-                    </div>
-                </section>
-
-                {/* Avisos e Lembretes */}
-                <section className="p-4">
-                    <h3 className="text-xs font-bold uppercase tracking-widest text-gold mb-4">Avisos e Lembretes</h3>
-                    <div className="space-y-3">
-                        <div className="glass-card p-4 rounded-xl border border-red-500/30 bg-red-500/5">
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm font-bold">Alertas de Estoque</span>
-                                <span className="text-red-500 text-sm font-bold">{lowStockAlerts} Críticos</span>
-                            </div>
-                            <p className="text-[10px] text-slate-400 mt-1">Produtos com estoque igual ou abaixo do mínimo</p>
-                        </div>
-
-                        <div className="glass-card p-4 rounded-xl border border-white/5 flex items-center gap-4">
-                            <div className="size-12 rounded-full bg-gold/10 flex items-center justify-center border border-gold/30">
-                                <span className="material-symbols-outlined text-gold">cake</span>
-                            </div>
-                            <div className="flex-1">
-                                <h4 className="text-sm font-bold">Aniversariante do Dia</h4>
-                                <p className="text-xs text-slate-400">Mariana Silva (Cliente VIP)</p>
-                            </div>
-                            <button className="bg-primary/20 text-primary text-[10px] font-bold px-3 py-1.5 rounded-full border border-primary/40 uppercase tracking-tighter hover:bg-primary hover:text-white transition-all">
-                                Enviar Cupom
-                            </button>
-                        </div>
                     </div>
                 </section>
             </main>

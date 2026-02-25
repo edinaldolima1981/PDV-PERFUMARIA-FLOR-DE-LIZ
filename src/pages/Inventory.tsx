@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { api } from '../services/api';
 
 const Inventory: React.FC = () => {
+    const location = useLocation();
     const [products, setProducts] = useState<any[]>([]);
+    const [brands, setBrands] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(location.state?.brand || '');
     const [filter, setFilter] = useState('all');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newProduct, setNewProduct] = useState({
+        nome: '',
+        preco: '',
+        marca_id: '',
+        quantidade: '0'
+    });
 
     useEffect(() => {
         loadInventory();
-    }, []);
+        loadBrands();
+        if (location.state?.brand) {
+            setSearchTerm(location.state.brand);
+        }
+    }, [location.state]);
 
     const loadInventory = async () => {
         try {
@@ -20,6 +34,33 @@ const Inventory: React.FC = () => {
             console.error('Erro ao carregar inventário:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const loadBrands = async () => {
+        try {
+            const data = await api.getBrands();
+            setBrands(data || []);
+        } catch (error) {
+            console.error('Erro ao carregar marcas:', error);
+        }
+    };
+
+    const handleAddProduct = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            await api.createProduct({
+                nome: newProduct.nome,
+                preco: parseFloat(newProduct.preco),
+                marca_id: newProduct.marca_id,
+            }, parseInt(newProduct.quantidade));
+
+            setIsModalOpen(false);
+            setNewProduct({ nome: '', preco: '', marca_id: '', quantidade: '0' });
+            loadInventory();
+        } catch (error) {
+            console.error('Erro ao adicionar produto:', error);
+            alert('Erro ao adicionar produto');
         }
     };
 
@@ -140,8 +181,81 @@ const Inventory: React.FC = () => {
                 </div>
             </main>
 
+            {/* Modal de Cadastro */}
+            {isModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                    <div className="glass-card w-full max-w-sm rounded-3xl p-6 shadow-2xl animate-in fade-in zoom-in duration-300">
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-xl font-bold">Novo Produto</h2>
+                            <button onClick={() => setIsModalOpen(false)} className="size-8 rounded-full hover:bg-white/10 flex items-center justify-center">
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleAddProduct} className="space-y-4">
+                            <div>
+                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Nome do Produto</label>
+                                <input
+                                    required
+                                    type="text"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 mt-1 outline-none focus:ring-2 focus:ring-primary/50"
+                                    value={newProduct.nome}
+                                    onChange={e => setNewProduct({ ...newProduct, nome: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Preço (R$)</label>
+                                    <input
+                                        required
+                                        type="number"
+                                        step="0.01"
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 mt-1 outline-none focus:ring-2 focus:ring-primary/50"
+                                        value={newProduct.preco}
+                                        onChange={e => setNewProduct({ ...newProduct, preco: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Qtd. Inicial</label>
+                                    <input
+                                        required
+                                        type="number"
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 mt-1 outline-none focus:ring-2 focus:ring-primary/50"
+                                        value={newProduct.quantidade}
+                                        onChange={e => setNewProduct({ ...newProduct, quantidade: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Marca</label>
+                                <select
+                                    required
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 mt-1 outline-none focus:ring-2 focus:ring-primary/50 appearance-none"
+                                    value={newProduct.marca_id}
+                                    onChange={e => setNewProduct({ ...newProduct, marca_id: e.target.value })}
+                                >
+                                    <option value="">Selecione...</option>
+                                    {brands.map(b => (
+                                        <option key={b.id} value={b.id} className="bg-slate-900">{b.nome}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <button type="submit" className="w-full py-4 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all mt-4">
+                                Cadastrar Produto
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
             {/* FAB */}
-            <button className="fixed bottom-24 right-6 size-14 bg-gradient-to-br from-gold to-accent-gold text-background-dark rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40 border-2 border-white/20">
+            <button
+                onClick={() => setIsModalOpen(true)}
+                className="fixed bottom-24 right-6 size-14 bg-gradient-to-br from-gold to-accent-gold text-background-dark rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40 border-2 border-white/20"
+            >
                 <span className="material-symbols-outlined text-3xl font-bold">add</span>
             </button>
         </div>
