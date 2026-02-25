@@ -5,6 +5,7 @@ import PDV from './pages/PDV';
 import Inventory from './pages/Inventory';
 import Customers from './pages/Customers';
 import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'settings',
-        element: <div className="text-slate-500 italic p-8 text-center mt-10">Módulo de Configurações em desenvolvimento...</div>,
+        element: <Settings />,
       },
     ],
   },

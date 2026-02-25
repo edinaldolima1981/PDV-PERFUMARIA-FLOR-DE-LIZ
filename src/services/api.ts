@@ -58,6 +58,36 @@ export const api = {
         return data as Brand[];
     },
 
+    async getAllBrands() {
+        const { data, error } = await supabase
+            .from('marcas')
+            .select('*')
+            .order('nome');
+        if (error) throw error;
+        return data as Brand[];
+    },
+
+    async createBrand(brandData: Partial<Brand>) {
+        const { data, error } = await supabase
+            .from('marcas')
+            .insert([brandData])
+            .select()
+            .single();
+        if (error) throw error;
+        return data as Brand;
+    },
+
+    async updateBrand(id: string, updates: Partial<Brand>) {
+        const { data, error } = await supabase
+            .from('marcas')
+            .update(updates)
+            .eq('id', id)
+            .select()
+            .single();
+        if (error) throw error;
+        return data as Brand;
+    },
+
     // Produtos
     async getProducts() {
         const { data, error } = await supabase
