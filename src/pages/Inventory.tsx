@@ -20,8 +20,7 @@ const Inventory: React.FC = () => {
     useEffect(() => {
         const init = async () => {
             await api.ensureDefaultBrands();
-            loadInventory();
-            loadBrands();
+            await Promise.all([loadInventory(), loadBrands()]);
         };
         init();
         if (location.state?.brand) {
@@ -44,9 +43,25 @@ const Inventory: React.FC = () => {
     const loadBrands = async () => {
         try {
             const data = await api.getBrands();
-            setBrands(data || []);
+            if (data && data.length > 0) {
+                setBrands(data);
+            } else {
+                // Fallback: shows the main brands even if the database returns nothing
+                setBrands([
+                    { id: 'boticario', nome: 'Boticário' },
+                    { id: 'avon', nome: 'Avon' },
+                    { id: 'natura', nome: 'Natura' },
+                    { id: 'rommanel', nome: 'Rommanel' },
+                ]);
+            }
         } catch (error) {
             console.error('Erro ao carregar marcas:', error);
+            setBrands([
+                { id: 'boticario', nome: 'Boticário' },
+                { id: 'avon', nome: 'Avon' },
+                { id: 'natura', nome: 'Natura' },
+                { id: 'rommanel', nome: 'Rommanel' },
+            ]);
         }
     };
 

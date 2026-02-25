@@ -70,7 +70,7 @@ export const api = {
     async ensureDefaultBrands() {
         const defaults = ['Boticário', 'Avon', 'Natura', 'Rommanel'];
         const { data: existing } = await supabase.from('marcas').select('nome');
-        const existingNames = existing?.map(b => b.nome) || [];
+        const existingNames = existing?.map((b: { nome: string }) => b.nome) || [];
 
         const toInsert = defaults
             .filter(name => !existingNames.includes(name))
