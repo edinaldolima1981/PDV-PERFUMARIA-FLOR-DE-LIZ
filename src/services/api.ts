@@ -67,6 +67,20 @@ export const api = {
         return data as Brand[];
     },
 
+    async ensureDefaultBrands() {
+        const defaults = ['Boticário', 'Avon', 'Natura', 'Rommanel'];
+        const { data: existing } = await supabase.from('marcas').select('nome');
+        const existingNames = existing?.map(b => b.nome) || [];
+
+        const toInsert = defaults
+            .filter(name => !existingNames.includes(name))
+            .map(name => ({ nome: name, ativo: true }));
+
+        if (toInsert.length > 0) {
+            await supabase.from('marcas').insert(toInsert);
+        }
+    },
+
     async createBrand(brandData: Partial<Brand>) {
         const { data, error } = await supabase
             .from('marcas')

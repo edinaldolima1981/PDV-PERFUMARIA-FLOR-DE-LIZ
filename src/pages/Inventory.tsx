@@ -18,8 +18,12 @@ const Inventory: React.FC = () => {
     });
 
     useEffect(() => {
-        loadInventory();
-        loadBrands();
+        const init = async () => {
+            await api.ensureDefaultBrands();
+            loadInventory();
+            loadBrands();
+        };
+        init();
         if (location.state?.brand) {
             setSearchTerm(location.state.brand);
         }
@@ -126,7 +130,7 @@ const Inventory: React.FC = () => {
                 {/* Summary Header */}
                 <div className="flex justify-between items-end">
                     <div>
-                        <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Inventário Atual</h3>
+                        <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Lista de Produtos</h3>
                         <p className="text-2xl font-bold">{filteredProducts.length} Itens</p>
                     </div>
                     <div className="flex gap-2 text-xs font-bold">

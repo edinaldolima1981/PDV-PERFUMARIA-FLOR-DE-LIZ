@@ -9,7 +9,11 @@ const Dashboard: React.FC = () => {
     const [cart, setCart] = useState<any[]>([]);
 
     useEffect(() => {
-        loadDashboardData();
+        const init = async () => {
+            await api.ensureDefaultBrands();
+            loadDashboardData();
+        };
+        init();
         const savedCart = localStorage.getItem('flordeliz_cart');
         if (savedCart) setCart(JSON.parse(savedCart));
     }, []);

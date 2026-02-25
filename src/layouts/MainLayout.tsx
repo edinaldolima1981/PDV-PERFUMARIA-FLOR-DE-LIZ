@@ -6,7 +6,7 @@ const MainLayout: React.FC = () => {
 
     const navItems = [
         { path: '/', label: 'Início', icon: 'home' },
-        { path: '/inventory', label: 'Estoque', icon: 'package_2' },
+        { path: '/inventory', label: 'Produtos', icon: 'package_2' },
         { path: '/pdv', label: 'Vendas', icon: 'sell' },
         { path: '/reports', label: 'Relatórios', icon: 'analytics' },
         { path: '/customers', label: 'Clientes', icon: 'group' },
